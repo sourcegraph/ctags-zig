@@ -12,6 +12,7 @@ log "./autogen.sh"
     --disable-seccomp \
     --disable-pcre2 \
     --disable-json \
+    --disable-iconv \
     CC="zig cc --target=$ZIG_TARGET" \
     CPP="zig cc -E" \
     AR="zig ar" \

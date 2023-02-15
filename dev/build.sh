@@ -2,7 +2,6 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"/..
 
-export ZIG_TARGET="x86_64-linux"
 export CTAGS_VERSION=f95bb3497f53748c2b6afc7f298cff218103ab90
 export LIBXML_VERSION=e20f4d7a656e47553f9da9d594e299e2fa2dbe41
 export LIBYAML_VERSION=f8f760f7387d2cc56a2fc7b1be313a3bf3f7f58c
