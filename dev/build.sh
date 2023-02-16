@@ -5,6 +5,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"/..
 export CTAGS_VERSION=f95bb3497f53748c2b6afc7f298cff218103ab90
 export LIBXML_VERSION=e20f4d7a656e47553f9da9d594e299e2fa2dbe41
 export LIBYAML_VERSION=f8f760f7387d2cc56a2fc7b1be313a3bf3f7f58c
+export LIBSECCOMP_VERSION=73be05e88623ebc6fcad3e04109c4fc47b7fc474
 
 function autoconfHostOS()
 {
@@ -71,6 +72,11 @@ export AUTOCONF_HOST="${AUTOCONF_HOST:-$(autoconfHost)}"
 
 log "detected AUTOCONF_HOST: $AUTOCONF_HOST"
 
+if [[ "$(autoconfHostOS)" == "macos" ]]; then
+    log "detected macos: using gsed (you may need to install it via homebrew)"
+    alias sed='gsed'
+fi
+
 export SYSROOT=`pwd`/root
 export CFLAGS="--sysroot=${SYSROOT} -I `pwd`/root/usr/local/include"
 export CXXFLAGS="--sysroot=${SYSROOT} -I `pwd`/root/usr/local/include"
@@ -84,6 +90,10 @@ rm -rf work/
 mkdir -p work/
 pushd work/
 
+# seccomp cannot be cross-compiled, it *must* be built on a Linux host machine.
+if [[ "$(autoconfHostOS)" == "linux" ]]; then
+    source ../dev/build-libseccomp.sh && popd
+fi
 source ../dev/build-libyaml.sh && popd
 source ../dev/build-libxml.sh && popd
 source ../dev/build-ctags.sh && popd
@@ -93,7 +103,9 @@ popd
 mkdir -p out/$ZIG_TARGET
 pushd out/$ZIG_TARGET
 
-zig ar -M <<EOM
+if [[ "$(autoconfHostOS)" == "linux" ]]; then
+    # seccomp branch
+    zig ar -M <<EOM
     CREATE libctags.a
     ADDLIB ../../root/usr/local/lib/libctags.a
     ADDLIB ../../root/usr/local/lib/libutil.a
@@ -102,5 +114,17 @@ zig ar -M <<EOM
     SAVE
     END
 EOM
+else
+    # non-seccomp branch
+    zig ar -M <<EOM
+    CREATE libctags.a
+    ADDLIB ../../root/usr/local/lib/libctags.a
+    ADDLIB ../../root/usr/local/lib/libutil.a
+    ADDLIB ../../root/usr/local/lib/libgnu.a
+    ADDLIB ../../root/usr/local/lib/libxml2.a
+    SAVE
+    END
+EOM
+fi
 
 zig cc -target $ZIG_TARGET -o test ../../test.c libctags.a
