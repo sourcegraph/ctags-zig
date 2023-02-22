@@ -9,7 +9,6 @@ log "./autogen.sh"
 ./configure --host=$AUTOCONF_HOST \
     --prefix=/usr/local \
     --enable-static \
-    --disable-pcre2 \
     --disable-json \
     --disable-iconv \
     CC="zig cc --target=$ZIG_TARGET" \
