@@ -10,6 +10,7 @@ export LIBYAML_VERSION=f8f760f7387d2cc56a2fc7b1be313a3bf3f7f58c
 export LIBSECCOMP_VERSION=73be05e88623ebc6fcad3e04109c4fc47b7fc474
 export LIBPCRE2_VERSION=10dc79fd1c7505c32eaafcbf0f46ee08a4d4782d
 export LIBJANSSON_VERSION=a22dc95311a79f07b68fdfeefe3b06eb793d3bc9
+export LIBICONV_VERSION=c593e206b2d4bc689950c742a0fb00b8013756a0
 
 function autoconfHostOS()
 {
@@ -97,6 +98,7 @@ pushd work/
 if [[ "$(autoconfHostOS)" == "linux" ]]; then
     source ../dev/build-libseccomp.sh && popd
 fi
+source ../dev/build-libiconv.sh && popd && set +x
 source ../dev/build-libjansson.sh && popd && set +x
 source ../dev/build-libpcre2.sh && popd && set +x
 source ../dev/build-libyaml.sh && popd && set +x
@@ -116,6 +118,7 @@ if [[ "$(autoconfHostOS)" == "linux" ]]; then
     ADDLIB ../../root/usr/local/lib/libutil.a
     ADDLIB ../../root/usr/local/lib/libgnu.a
     ADDLIB ../../root/usr/local/lib/libxml2.a
+    ADDLIB ../../root/usr/local/lib/libiconv.a
     SAVE
     END
 EOM
@@ -127,6 +130,7 @@ else
     ADDLIB ../../root/usr/local/lib/libutil.a
     ADDLIB ../../root/usr/local/lib/libgnu.a
     ADDLIB ../../root/usr/local/lib/libxml2.a
+    ADDLIB ../../root/usr/local/lib/libiconv.a
     SAVE
     END
 EOM
