@@ -9,4 +9,4 @@ RUN wget -c https://ziglang.org/builds/zig-linux-$(arch)-0.11.0-dev.1605+abc9530
 RUN zig version
 
 WORKDIR /ctags-zig
-ENTRYPOINT ["/ctags-zig/build-x86_64-linux.sh"]
+ENTRYPOINT ["/ctags-zig/build-all.sh"]

@@ -2,10 +2,9 @@
 
 ensureDependency "libyaml" "https://github.com/yaml/libyaml" $LIBYAML_VERSION
 log "building deps/libyaml..."
+set -x
 
-log "./bootstrap"
 ./bootstrap
-
 ./configure --host=$AUTOCONF_HOST \
     --prefix=/usr/local \
     --enable-static \

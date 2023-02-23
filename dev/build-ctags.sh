@@ -2,14 +2,12 @@
 
 ensureDependency "ctags" "https://github.com/universal-ctags/ctags" $CTAGS_VERSION
 log "building deps/ctags..."
+set -x
 
-log "./autogen.sh"
 ./autogen.sh
-
 ./configure --host=$AUTOCONF_HOST \
     --prefix=/usr/local \
     --enable-static \
-    --disable-json \
     --disable-iconv \
     CC="zig cc --target=$ZIG_TARGET" \
     CPP="zig cc -E" \

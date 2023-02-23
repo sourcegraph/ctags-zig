@@ -2,10 +2,9 @@
 
 ensureDependency "libseccomp" "https://github.com/seccomp/libseccomp" $LIBSECCOMP_VERSION
 log "building deps/libseccomp..."
+set -x
 
-log "./autogen.sh"
 ./autogen.sh
-
 ./configure --host=$AUTOCONF_HOST \
     --prefix=/usr/local \
     --enable-static \

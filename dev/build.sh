@@ -2,11 +2,14 @@
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"/..
 
+rm -rf work/
+
 export CTAGS_VERSION=f95bb3497f53748c2b6afc7f298cff218103ab90
 export LIBXML_VERSION=e20f4d7a656e47553f9da9d594e299e2fa2dbe41
 export LIBYAML_VERSION=f8f760f7387d2cc56a2fc7b1be313a3bf3f7f58c
 export LIBSECCOMP_VERSION=73be05e88623ebc6fcad3e04109c4fc47b7fc474
 export LIBPCRE2_VERSION=10dc79fd1c7505c32eaafcbf0f46ee08a4d4782d
+export LIBJANSSON_VERSION=a22dc95311a79f07b68fdfeefe3b06eb793d3bc9
 
 function autoconfHostOS()
 {
@@ -87,7 +90,6 @@ export PKG_CONFIG_LIBDIR="${SYSROOT}/usr/lib/pkgconfig"
 
 mkdir -p deps/
 
-rm -rf work/
 mkdir -p work/
 pushd work/
 
@@ -95,10 +97,11 @@ pushd work/
 if [[ "$(autoconfHostOS)" == "linux" ]]; then
     source ../dev/build-libseccomp.sh && popd
 fi
-source ../dev/build-libpcre2.sh && popd
-source ../dev/build-libyaml.sh && popd
-source ../dev/build-libxml.sh && popd
-source ../dev/build-ctags.sh && popd
+source ../dev/build-libjansson.sh && popd && set +x
+source ../dev/build-libpcre2.sh && popd && set +x
+source ../dev/build-libyaml.sh && popd && set +x
+source ../dev/build-libxml.sh && popd && set +x
+source ../dev/build-ctags.sh && popd && set +x
 
 popd
 
